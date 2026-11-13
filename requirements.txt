@@ -1,0 +1,8 @@
+# Step 1 (dataset). Tested with Python 3.12.
+# mediapipe installs opencv-contrib-python itself. Do NOT also install opencv-python (they conflict).
+mediapipe==1.1.1
+numpy
+# Step 2 (training). On Windows the default pip wheel is CPU-only, which is what we want.
+torch
+# Steps 3-4 (real-time + game)
+pygame==2.6.1

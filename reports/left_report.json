@@ -1,0 +1,66 @@
+{
+  "hand": "Left",
+  "features": "Left",
+  "rows": 16800,
+  "classes": [
+    "TILT_LEFT",
+    "NEUTRAL",
+    "TILT_RIGHT"
+  ],
+  "rows_per_class": {
+    "TILT_LEFT": 5550,
+    "NEUTRAL": 5700,
+    "TILT_RIGHT": 5550
+  },
+  "eval_group": "person",
+  "per_group": {
+    "camilo": {
+      "mlp": 0.7733333333333333,
+      "rules": 0.7548148148148148
+    },
+    "jehis": {
+      "mlp": 0.8193589743589743,
+      "rules": 0.8182051282051283
+    },
+    "maria": {
+      "mlp": 0.8980392156862745,
+      "rules": 0.9252287581699347
+    }
+  },
+  "mlp_accuracy": 0.8514880952380952,
+  "rules_accuracy": 0.861845238095238,
+  "mlp_confusion": [
+    [
+      4410,
+      1068,
+      72
+    ],
+    [
+      610,
+      5027,
+      63
+    ],
+    [
+      37,
+      645,
+      4868
+    ]
+  ],
+  "rules_confusion": [
+    [
+      4691,
+      856,
+      3
+    ],
+    [
+      639,
+      5049,
+      12
+    ],
+    [
+      36,
+      775,
+      4739
+    ]
+  ]
+}

@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+models/*.task
+progress.json
+highscores.json
+settings.json
+models/*.new.pt
+data/doubts/
+dist/
+build/
+*.spec

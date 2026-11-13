@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Monkey Banana Catcher · Juega con tus manos</title>
+<meta name="description" content="Un juego retro que controlas con gestos de la mano frente a la cámara de tu celular. Una red neuronal reconoce tus gestos en tiempo real.">
+<meta name="theme-color" content="#16101f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Monkey">
+<meta property="og:title" content="Monkey Banana Catcher · Juega con tus manos">
+<meta property="og:description" content="Escanea, lee cómo funciona y juega con la cámara de tu celular.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=Pixelify+Sans:wght@400;600&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2316101f'/%3E%3Cpath d='M3 4h2v2h6V4h2v5h-1v2H4V9H3z' fill='%23965c2c'/%3E%3Cpath d='M5 7h6v3H5z' fill='%23f0c896'/%3E%3C/svg%3E">
+<style>
+/* Mobile first. One dark theme on purpose: it is the visual world of the game. */
+:root {
+  --ink: #16101f; --panel: #221634; --panel-2: #342452; --line: #5a4682;
+  --gold: #ffd63c; --gold-deep: #784000; --leaf: #6ee66e; --sky: #54a0ec; --red: #ff5a6e;
+  --text: #ffffff; --soft: #d4cbe6; --muted: #a89cc2;
+  --f-title: "Press Start 2P", "Courier New", monospace;
+  --f-label: "Silkscreen", "Courier New", monospace;
+  --f-body: "Pixelify Sans", "Trebuchet MS", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--ink); color: var(--text); font-family: var(--f-body); font-size: 1.08rem; line-height: 1.5; }
+img, canvas { image-rendering: pixelated; }
+a { color: var(--gold); }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+.wrap { max-width: 560px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-left)) 0 max(16px, env(safe-area-inset-right)); }
+section { padding: 44px 0; border-bottom: 2px solid var(--line); }
+.tag { font-family: var(--f-label); color: var(--leaf); letter-spacing: .1em; text-transform: uppercase; font-size: .82rem; margin: 0 0 10px; }
+h1, h2 { font-family: var(--f-title); font-weight: 400; color: var(--gold); text-shadow: 3px 3px 0 var(--gold-deep); line-height: 1.45; margin: 0 0 14px; text-wrap: balance; }
+h1 { font-size: clamp(1.35rem, 7vw, 2rem); }
+h2 { font-size: clamp(1rem, 5vw, 1.35rem); }
+h3 { font-family: var(--f-label); font-size: 1rem; margin: 0 0 4px; color: var(--text); letter-spacing: .04em; }
+p { margin: 0 0 12px; color: var(--soft); }
+.lead { font-size: 1.2rem; color: var(--text); }
+
+/* Buttons: big touch targets (min 52 px), high contrast gold on dark */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; padding: 0 22px;
+  font-family: var(--f-title); font-size: .85rem; letter-spacing: .02em; text-decoration: none; border: 0;
+  background: var(--gold); color: #2a1600; box-shadow: 0 5px 0 var(--gold-deep); border-radius: 4px; }
+.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--gold-deep); }
+.btn.ghost { background: transparent; color: var(--gold); box-shadow: inset 0 0 0 2px var(--gold); }
+.btn.block { width: 100%; }
+
+/* Hero */
+.hero { position: relative; overflow: hidden; padding: 0; border-bottom: 6px solid #74c040; }
+#attract { display: block; width: 100%; aspect-ratio: 264 / 200; }
+.hero .wrap { padding-top: 22px; padding-bottom: 32px; background: var(--ink); }
+.hero .ctas { display: grid; gap: 14px; margin-top: 20px; }
+
+/* Cards */
+.cards { display: grid; gap: 14px; }
+.card { background: var(--panel); border: 2px solid var(--line); border-radius: 6px; padding: 16px; }
+.card p { margin: 0; }
+.gesture { display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: center; }
+.hand { width: 96px; height: 96px; background: #120c1a; border-radius: 6px; }
+.poses { display: flex; gap: 6px; margin-top: 10px; }
+.poses figure { margin: 0; text-align: center; flex: 1; }
+.poses .hand { width: 100%; height: auto; aspect-ratio: 1; }
+.poses figcaption { font-family: var(--f-label); font-size: .72rem; color: var(--muted); margin-top: 4px; }
+.key { display: inline-block; font-family: var(--f-label); background: var(--panel-2); border: 1px solid var(--line); padding: 0 6px; border-radius: 3px; color: var(--text); }
+.pill { display: inline-block; font-family: var(--f-label); font-size: .75rem; background: var(--leaf); color: #0d2a0d; padding: 2px 8px; border-radius: 3px; margin-bottom: 8px; }
+.pill.blue { background: var(--sky); color: #08223f; }
+
+/* AI steps */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; background: var(--panel); border: 2px solid var(--line); border-radius: 6px; padding: 12px; }
+.steps li::before { content: counter(s); font-family: var(--f-title); font-size: .9rem; display: grid; place-items: center; width: 40px; height: 40px; background: var(--gold); color: #2a1600; border-radius: 4px; }
+.steps p { margin: 0; font-size: 1rem; }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat { background: var(--panel); border: 2px solid var(--line); border-radius: 6px; padding: 14px 12px; }
+.stat b { display: block; font-family: var(--f-title); font-size: 1.15rem; color: var(--gold); font-weight: 400; margin-bottom: 6px; }
+.stat span { font-size: .92rem; color: var(--soft); line-height: 1.3; display: block; }
+.stat.wide { grid-column: 1 / -1; }
+.shot { display: block; width: 100%; height: auto; border: 2px solid var(--line); border-radius: 6px; margin-top: 14px; }
+.tips { margin: 12px 0 0; padding-left: 20px; color: var(--soft); }
+.tips li { margin-bottom: 4px; }
+footer { padding: 32px 0 48px; color: var(--muted); font-size: .95rem; text-align: center; }
+.final { text-align: center; }
+
+/* ---------- Game screen (full screen over the page) ---------- */
+#play { position: fixed; inset: 0; z-index: 10; background: #0d0913; display: none;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  grid-template-rows: auto auto 1fr auto; overscroll-behavior: none; touch-action: none; user-select: none; -webkit-user-select: none; }
+#play.on { display: grid; }
+.hud { display: flex; align-items: center; gap: 10px; padding: 8px 10px; font-family: var(--f-title); font-size: .7rem; background: var(--panel); border-bottom: 2px solid var(--line); }
+.hud .grow { flex: 1; }
+.hud .hearts { color: var(--red); letter-spacing: 1px; font-size: .8rem; }
+.hud .score { color: var(--gold); }
+.icon-btn { width: 40px; height: 40px; border: 2px solid var(--line); background: var(--panel-2); border-radius: 4px; font-family: var(--f-title); font-size: .8rem; }
+.stage { position: relative; }
+#screen { display: block; width: 100%; aspect-ratio: 264 / 200; background: #54a0ec; }
+.banner { position: absolute; left: 50%; top: 12%; transform: translateX(-50%); font-family: var(--f-title); font-size: .8rem; color: #fff;
+  background: rgba(22,16,31,.85); padding: 8px 12px; border: 2px solid var(--gold); border-radius: 4px; white-space: nowrap; opacity: 0; transition: opacity .3s; pointer-events: none; }
+.banner.show { opacity: 1; }
+.cam { display: grid; align-self: center; grid-template-columns: minmax(0, 46%) 1fr; gap: 10px; padding: 10px; min-height: 0; align-content: start; }
+.cam-box { position: relative; background: #000; border: 2px solid var(--line); border-radius: 4px; overflow: hidden; align-self: start; }
+#preview { display: none; width: 100%; image-rendering: auto; }
+.cam-off { aspect-ratio: 4/3; display: grid; place-items: center; text-align: center; padding: 8px; font-size: .85rem; color: var(--muted); }
+.readout { display: grid; gap: 8px; align-content: start; font-size: .9rem; }
+.read { background: var(--panel); border: 2px solid var(--line); border-radius: 4px; padding: 6px 8px; }
+.read .lab { font-family: var(--f-label); font-size: .72rem; color: var(--muted); }
+.read .val { font-family: var(--f-title); font-size: .72rem; margin-top: 4px; }
+.bar { height: 6px; background: #120c1a; margin-top: 6px; border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--leaf); transition: width .1s; }
+.read.active { border-color: var(--gold); }
+.fps { font-family: var(--f-label); font-size: .7rem; color: var(--muted); }
+.pad { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 10px; padding: 10px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+.pad button { min-height: 68px; border: 0; border-radius: 6px; background: var(--panel-2); box-shadow: inset 0 0 0 2px var(--line), 0 4px 0 #0b0712; font-family: var(--f-title); font-size: 1.1rem; }
+.pad button.jump { background: var(--gold); color: #2a1600; box-shadow: 0 4px 0 var(--gold-deep); font-size: .8rem; }
+.pad button.down { transform: translateY(3px); box-shadow: inset 0 0 0 2px var(--gold); }
+.overlay { position: absolute; inset: 0; z-index: 2; display: none; place-items: center; padding: 16px; background: rgba(13,9,19,.92); overflow: auto; }
+.overlay.on { display: grid; }
+.dialog { width: 100%; max-width: 440px; display: grid; gap: 12px; text-align: center; }
+.dialog h2 { margin-bottom: 4px; }
+.choice { text-align: left; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: center; padding: 12px 14px; background: var(--panel); border: 2px solid var(--line); border-radius: 6px; }
+.choice input { width: 22px; height: 22px; accent-color: var(--gold); grid-row: span 2; }
+.choice:has(input:checked) { border-color: var(--gold); }
+.choice small { color: var(--muted); grid-column: 2; font-size: .9rem; line-height: 1.3; }
+.big-score { font-family: var(--f-title); font-size: 2rem; color: var(--gold); text-shadow: 3px 3px 0 var(--gold-deep); }
+.status { color: var(--soft); min-height: 1.5em; }
+.tip { margin: 0; font-size: .9rem; color: var(--muted); }
+[hidden] { display: none !important; }
+.err { color: #ffb4bd; }
+
+/* Landscape phone: game on the left, camera + buttons on the right */
+@media (orientation: landscape) and (max-height: 560px) {
+  #play.on { grid-template-columns: auto minmax(200px, 1fr); grid-template-rows: auto 1fr auto; }
+  .hud { grid-column: 1 / -1; }
+  .stage { grid-row: 2 / 4; height: 100%; display: grid; place-items: center; }
+  #screen { height: 100%; width: auto; max-width: 64vw; }
+  .cam { grid-template-columns: 1fr 1fr; }
+  .pad { grid-column: 2; }
+  .pad button { min-height: 56px; }
+}
+@media (min-width: 900px) and (orientation: landscape) {
+  #play.on { grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: auto 1fr auto; }
+  .hud { grid-column: 1 / -1; }
+  .stage { grid-row: 2 / 4; display: grid; place-items: center; padding: 12px; }
+  #screen { width: auto; height: 100%; max-height: calc(100vh - 90px); max-width: 100%; }
+  .cam { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .banner { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <canvas id="attract" width="264" height="200" aria-label="El mono atrapando bananas (demostración automática)"></canvas>
+  <div class="wrap">
+    <p class="tag">Proyecto de Inteligencia Artificial · UIS</p>
+    <h1>Monkey Banana Catcher</h1>
+    <p class="lead">Un juego retro que controlas con <strong>las manos</strong>, frente a la cámara de tu celular. Una red neuronal entiende tus gestos en tiempo real.</p>
+    <div class="ctas">
+      <button class="btn block" data-play>▶ Jugar ahora</button>
+      <a class="btn ghost block" href="#como">¿Cómo funciona?</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="como">
+  <div class="wrap">
+    <p class="tag">1 · Cómo se juega</p>
+    <h2>Dos gestos, nada más</h2>
+    <p>Atrapa las bananas que caen y salta los cocos que ruedan. Cada 10 bananas cambia el escenario y sube la velocidad. Tienes 90 segundos y 5 corazones.</p>
+    <div class="cards">
+      <div class="card">
+        <span class="pill">Mover</span>
+        <h3>Inclina el dedo índice</h3>
+        <p>Índice hacia la izquierda: el mono va a la izquierda. Hacia la derecha: va a la derecha. Recto: se queda quieto.</p>
+        <div class="poses">
+          <figure><svg class="hand" data-pose="TILT_LEFT" viewBox="0 0 100 100" aria-hidden="true"></svg><figcaption>Izquierda</figcaption></figure>
+          <figure><svg class="hand" data-pose="NEUTRAL" viewBox="0 0 100 100" aria-hidden="true"></svg><figcaption>Quieto</figcaption></figure>
+          <figure><svg class="hand" data-pose="TILT_RIGHT" viewBox="0 0 100 100" aria-hidden="true"></svg><figcaption>Derecha</figcaption></figure>
+        </div>
+      </div>
+      <div class="card">
+        <span class="pill blue">Saltar</span>
+        <h3>Haz una pinza</h3>
+        <p>Junta la punta del pulgar con la del índice. Cada pinza nueva es un salto.</p>
+        <div class="poses">
+          <figure><svg class="hand" data-pose="OPEN" viewBox="0 0 100 100" aria-hidden="true"></svg><figcaption>Abierta</figcaption></figure>
+          <figure><svg class="hand" data-pose="PINCH" viewBox="0 0 100 100" aria-hidden="true"></svg><figcaption>Pinza = salto</figcaption></figure>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:12px;font-size:.92rem;color:var(--muted)">Los dibujos son la mano promedio de los 28.950 cuadros que grabamos para entrenar.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="tag">2 · Desde tu celular</p>
+    <h2>Elige cómo jugar</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>✋ Una mano (recomendado)</h3>
+        <p>Sostén el celular con una mano y juega con la otra frente a la cámara frontal: la misma mano inclina el índice para moverse y hace la pinza para saltar.</p>
+      </div>
+      <div class="card">
+        <h3>🙌 Dos manos (como en el PC)</h3>
+        <p>Apoya el celular en la mesa o en un soporte. Mano izquierda para moverte y mano derecha para saltar, igual que el juego original.</p>
+      </div>
+      <div class="card">
+        <h3>👆 Solo botones</h3>
+        <p>¿Sin cámara o con poca luz? También hay botones táctiles en pantalla.</p>
+      </div>
+    </div>
+    <ul class="tips">
+      <li>Busca buena luz de frente, no una ventana detrás de ti.</li>
+      <li>Deja la mano a unos 30–50 cm de la cámara, con todos los dedos visibles.</li>
+      <li>La imagen se procesa <strong>dentro de tu celular</strong>: no se graba ni se envía nada.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="tag">3 · La inteligencia artificial</p>
+    <h2>Cómo piensa el juego</h2>
+    <ol class="steps">
+      <li><div><h3>La cámara</h3><p>Toma unas 20–30 imágenes por segundo de tu mano, como un espejo.</p></div></li>
+      <li><div><h3>MediaPipe encuentra 21 puntos</h3><p>Un modelo de Google ubica la muñeca y cada articulación de los dedos.</p></div></li>
+      <li><div><h3>Nuestra red neuronal decide</h3><p>Dos redes pequeñas (una por mano) que entrenamos nosotros: la izquierda mira la dirección del índice (8 números) y la derecha las distancias entre las puntas de los dedos (10 números).</p></div></li>
+      <li><div><h3>Un voto evita errores</h3><p>Solo cambiamos el comando cuando la mayoría de los últimos cuadros está de acuerdo y la red está segura (≥ 70 %).</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="tag">4 · Resultados</p>
+    <h2>Probado con una persona nueva</h2>
+    <p>Entrenamos con dos integrantes del equipo y probamos con el tercero, que la red nunca había visto.</p>
+    <div class="stats">
+      <div class="stat"><b>95 %</b><span>aciertos en la pinza (mano derecha)</span></div>
+      <div class="stat"><b>85 %</b><span>aciertos al inclinar el índice (mano izquierda)</span></div>
+      <div class="stat"><b>28.950</b><span>cuadros grabados por el equipo</span></div>
+      <div class="stat"><b>0,1 ms</b><span>tarda la red en decidir cada cuadro</span></div>
+    </div>
+    <img class="shot" src="../screens/3_beach.png" alt="Captura del juego en PC: el mono en la playa, con el panel de gestos a la derecha" width="1040" height="600" loading="lazy">
+    <p style="margin-top:8px;font-size:.92rem;color:var(--muted)">La versión de PC (Python + Pygame) tiene 5 niveles, tutorial y calibración. Esta versión web es una adaptación para celular con las mismas redes neuronales.</p>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <h2>¿Listo?</h2>
+    <p>Permite el uso de la cámara cuando el navegador lo pregunte.</p>
+    <button class="btn block" data-play>▶ Jugar ahora</button>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Monkey Banana Catcher · Camilo, Jehis y María<br>
+    Inteligencia Artificial · Universidad Industrial de Santander<br>
+    <a href="../">Ver la presentación del proyecto</a>
+  </div>
+</footer>
+
+<!-- Game screen -->
+<div id="play" role="dialog" aria-modal="true" aria-label="Juego">
+  <div class="hud">
+    <span class="score" id="hudScore">0</span>
+    <span>🍌 <span id="hudBananas">0</span></span>
+    <span class="hearts" id="hudHearts" aria-label="Corazones">♥♥♥♥♥</span>
+    <span class="grow"></span>
+    <span id="hudTime">90</span>
+    <button class="icon-btn" id="fsBtn" aria-label="Pantalla completa">⛶</button>
+    <button class="icon-btn" id="closeBtn" aria-label="Salir del juego">✕</button>
+  </div>
+  <div class="stage">
+    <canvas id="screen" width="264" height="200"></canvas>
+    <div class="banner" id="banner"></div>
+    <div class="overlay on" id="startOv">
+      <div class="dialog">
+        <h2>¿Cómo quieres jugar?</h2>
+        <label class="choice"><input type="radio" name="mode" value="one" checked><b>✋ Una mano</b><small>Sostén el celular y juega con la otra mano.</small></label>
+        <label class="choice"><input type="radio" name="mode" value="two"><b>🙌 Dos manos</b><small>Celular apoyado. Izquierda mueve, derecha salta.</small></label>
+        <label class="choice"><input type="radio" name="mode" value="touch"><b>👆 Solo botones</b><small>Sin cámara.</small></label>
+        <p class="tip" id="iosTip" hidden>En iPhone, para pantalla completa: toca Compartir → «Agregar a inicio» y abre el juego desde ese ícono.</p>
+        <button class="btn block" id="goBtn">Empezar</button>
+        <p class="status" id="status" aria-live="polite"></p>
+      </div>
+    </div>
+    <div class="overlay" id="overOv">
+      <div class="dialog">
+        <p class="tag" id="overWhy">¡Se acabó el tiempo!</p>
+        <div class="big-score" id="overScore">0</div>
+        <p id="overInfo"></p>
+        <button class="btn block" id="againBtn">Jugar otra vez</button>
+        <button class="btn ghost block" id="exitBtn">Volver a la explicación</button>
+      </div>
+    </div>
+  </div>
+  <div class="cam" id="camPanel">
+    <div class="cam-box"><canvas id="preview"></canvas><div class="cam-off" id="camOff">La cámara se enciende al tocar «Empezar»</div></div>
+    <div class="readout">
+      <div class="read" id="readMove"><div class="lab">MOVER</div><div class="val" id="valMove">—</div><div class="bar"><i id="barMove"></i></div></div>
+      <div class="read" id="readJump"><div class="lab">SALTAR</div><div class="val" id="valJump">—</div><div class="bar"><i id="barJump"></i></div></div>
+      <div class="fps" id="fps"></div>
+      <p class="fps" id="hint">Mano a 30–50 cm, con buena luz de frente.</p>
+    </div>
+  </div>
+  <div class="pad">
+    <button data-move="-1" aria-label="Izquierda">◀</button>
+    <button data-move="1" aria-label="Derecha">▶</button>
+    <button class="jump" data-jump aria-label="Saltar">SALTAR</button>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

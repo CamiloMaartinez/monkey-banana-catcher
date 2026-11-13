@@ -1,0 +1,160 @@
+{
+  "timing_ms": {
+    "MLP": 0.19538694000175383,
+    "GRU": 0.46208539999952336
+  },
+  "Left": {
+    "MLP (1 frame)": {
+      "per_person": [
+        {
+          "person": "camilo",
+          "accuracy": 0.7903703703703704,
+          "flicker_per_100": 4.592592592592593,
+          "delay_frames": 10.666666666666666
+        },
+        {
+          "person": "jehis",
+          "accuracy": 0.8314102564102565,
+          "flicker_per_100": 1.8974358974358976,
+          "delay_frames": 3.257142857142857
+        },
+        {
+          "person": "maria",
+          "accuracy": 0.9030065359477124,
+          "flicker_per_100": 1.3464052287581698,
+          "delay_frames": 6.923076923076923
+        }
+      ],
+      "accuracy": 0.8415957209094463,
+      "flicker_per_100": 2.612144572928887,
+      "delay_frames": 6.948962148962149
+    },
+    "MLP + vote 3 of 5": {
+      "per_person": [
+        {
+          "person": "camilo",
+          "accuracy": 0.7666666666666667,
+          "flicker_per_100": 2.2222222222222223,
+          "delay_frames": 12.666666666666666
+        },
+        {
+          "person": "jehis",
+          "accuracy": 0.8093589743589743,
+          "flicker_per_100": 1.1410256410256412,
+          "delay_frames": 6.6571428571428575
+        },
+        {
+          "person": "maria",
+          "accuracy": 0.870718954248366,
+          "flicker_per_100": 0.6143790849673203,
+          "delay_frames": 11.23076923076923
+        }
+      ],
+      "accuracy": 0.8155815317580023,
+      "flicker_per_100": 1.3258756494050614,
+      "delay_frames": 10.184859584859584
+    },
+    "GRU (8 frames)": {
+      "per_person": [
+        {
+          "person": "camilo",
+          "accuracy": 0.7533333333333333,
+          "flicker_per_100": 4.074074074074074,
+          "delay_frames": 13.166666666666666
+        },
+        {
+          "person": "jehis",
+          "accuracy": 0.8206410256410256,
+          "flicker_per_100": 1.1025641025641024,
+          "delay_frames": 5.514285714285714
+        },
+        {
+          "person": "maria",
+          "accuracy": 0.9001307189542483,
+          "flicker_per_100": 0.9411764705882352,
+          "delay_frames": 4.384615384615385
+        }
+      ],
+      "accuracy": 0.8247016926428691,
+      "flicker_per_100": 2.0392715490754707,
+      "delay_frames": 7.688522588522588
+    }
+  },
+  "Right": {
+    "MLP (1 frame)": {
+      "per_person": [
+        {
+          "person": "camilo",
+          "accuracy": 0.8622222222222222,
+          "flicker_per_100": 3.851851851851852,
+          "delay_frames": 0.6666666666666666
+        },
+        {
+          "person": "jehis",
+          "accuracy": 0.9680701754385965,
+          "flicker_per_100": 2.3508771929824563,
+          "delay_frames": 0.0
+        },
+        {
+          "person": "maria",
+          "accuracy": 0.9692156862745098,
+          "flicker_per_100": 0.9019607843137255,
+          "delay_frames": 2.5238095238095237
+        }
+      ],
+      "accuracy": 0.9331693613117761,
+      "flicker_per_100": 2.3682299430493448,
+      "delay_frames": 1.0634920634920635
+    },
+    "MLP + vote 3 of 5": {
+      "per_person": [
+        {
+          "person": "camilo",
+          "accuracy": 0.8807407407407407,
+          "flicker_per_100": 1.7037037037037037,
+          "delay_frames": 1.3333333333333333
+        },
+        {
+          "person": "jehis",
+          "accuracy": 0.9778947368421053,
+          "flicker_per_100": 0.543859649122807,
+          "delay_frames": 2.2857142857142856
+        },
+        {
+          "person": "maria",
+          "accuracy": 0.9392156862745098,
+          "flicker_per_100": 0.5882352941176471,
+          "delay_frames": 8.285714285714286
+        }
+      ],
+      "accuracy": 0.9326170546191186,
+      "flicker_per_100": 0.9452662156480526,
+      "delay_frames": 3.9682539682539684
+    },
+    "GRU (8 frames)": {
+      "per_person": [
+        {
+          "person": "camilo",
+          "accuracy": 0.9444444444444444,
+          "flicker_per_100": 1.037037037037037,
+          "delay_frames": 4.0
+        },
+        {
+          "person": "jehis",
+          "accuracy": 0.9629824561403508,
+          "flicker_per_100": 0.4912280701754386,
+          "delay_frames": 4.190476190476191
+        },
+        {
+          "person": "maria",
+          "accuracy": 0.9605882352941176,
+          "flicker_per_100": 0.27450980392156865,
+          "delay_frames": 6.809523809523809
+        }
+      ],
+      "accuracy": 0.9560050452929709,
+      "flicker_per_100": 0.6009249703780147,
+      "delay_frames": 5.0
+    }
+  }
+}

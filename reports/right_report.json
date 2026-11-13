@@ -1,0 +1,50 @@
+{
+  "hand": "Right",
+  "features": "Right",
+  "rows": 12150,
+  "classes": [
+    "OPEN",
+    "PINCH"
+  ],
+  "rows_per_class": {
+    "OPEN": 6150,
+    "PINCH": 6000
+  },
+  "eval_group": "person",
+  "per_group": {
+    "camilo": {
+      "mlp": 0.8577777777777778,
+      "rules": 0.9066666666666666
+    },
+    "jehis": {
+      "mlp": 0.9631578947368421,
+      "rules": 0.9480701754385965
+    },
+    "maria": {
+      "mlp": 0.9684313725490196,
+      "rules": 0.9654901960784313
+    }
+  },
+  "mlp_accuracy": 0.9536625514403292,
+  "rules_accuracy": 0.9507818930041152,
+  "mlp_confusion": [
+    [
+      5811,
+      339
+    ],
+    [
+      224,
+      5776
+    ]
+  ],
+  "rules_confusion": [
+    [
+      6079,
+      71
+    ],
+    [
+      527,
+      5473
+    ]
+  ]
+}
