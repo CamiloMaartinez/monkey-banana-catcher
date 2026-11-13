@@ -158,7 +158,9 @@ h2 { margin: 0; font-family: var(--f-title); font-weight: 400; color: var(--gold
 .end canvas.mk { width: 96px; height: 108px; }
 .js .slide.in canvas.mk { animation: drop .7s cubic-bezier(.3, 1.6, .5, 1) both, bob 1s steps(2) .8s infinite; }
 .qr { background: #fff; padding: 14px; border: 4px solid var(--gold); box-shadow: 8px 8px 0 var(--gold-deep); display: grid; gap: 8px; justify-items: center; color: var(--ink); text-decoration: none; }
-.qr svg { width: clamp(180px, 24vw, 280px); height: auto; display: block; shape-rendering: crispEdges; }
+.qrs { display: flex; gap: 22px; flex-wrap: wrap; justify-content: center; }
+.qr.repo { border-color: var(--leaf); box-shadow: 8px 8px 0 #1f6a1f; }
+.qr svg { width: clamp(150px, 17vw, 240px); height: auto; display: block; shape-rendering: crispEdges; }
 .qr span { font-family: var(--f-title); font-size: .7rem; }
 .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 20px; font-family: var(--f-title); font-size: .8rem; text-decoration: none; background: var(--gold); color: #2a1600; box-shadow: 0 5px 0 var(--gold-deep); }
 .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--gold-deep); }
@@ -299,14 +301,20 @@ h2 { margin: 0; font-family: var(--f-title); font-weight: 400; color: var(--gold
         <canvas class="mk sprite" width="16" height="16" aria-hidden="true"></canvas>
         <h2 data-a>¡Ahora, la demo!</h2>
         <p class="big" data-a>Gracias. ¿Preguntas?</p>
-        <p class="big" data-a>Escanea el código y juega con la cámara de <strong>tu celular</strong>.</p>
+        <p class="big" data-a>Escanea un código: juega con la cámara de <strong>tu celular</strong> o descarga el <strong>juego completo</strong>.</p>
         <a class="btn" href="jugar/" data-a>▶ Jugar en el navegador</a>
-        <div class="url" data-a>monkey-banana-catcher.vercel.app/jugar</div>
+        <div class="url" data-a>Jugar: monkey-banana-catcher.vercel.app/jugar<br>Código y juego completo: github.com/CamiloMaartinez/monkey-banana-catcher</div>
       </div>
-      <a class="qr" href="jugar/" data-a aria-label="Código QR para jugar: monkey-banana-catcher.vercel.app/jugar">
-        <svg viewBox="-4 -4 45 45" aria-hidden="true"><rect x="-4" y="-4" width="45" height="45" fill="#fff"/><path id="qrp" fill="#16101f" d=""/></svg>
-        <span>ESCANEA Y JUEGA</span>
-      </a>
+      <div class="qrs" data-a>
+        <a class="qr" href="jugar/" aria-label="Código QR para jugar: monkey-banana-catcher.vercel.app/jugar">
+          <svg viewBox="-4 -4 45 45" aria-hidden="true"><rect x="-4" y="-4" width="45" height="45" fill="#fff"/><path class="qrp" fill="#16101f" d="" data-hex="1fcb50877f,104405b141,175170925d,1742aa0d5d,175a69a65d,1053ce0141,1fd555557f,000c61d800,095a59fbb4,0ca3ffa442,0a5ad77e98,0a3212c7bf,1bf5efd0e6,1618316e94,1ee263eb9c,0794a79604,057e9922ee,0322d65e10,195983b298,1581d8a775,0e5b6dd0c6,121c217a1a,0949cfa388,1f1034a524,0c507cde75,1a3d0f61fc,01c854a582,008df6b44f,1efb35d3f1,001c12ad18,1fcb5f315e,1041875514,1751e271fc,174f2b0a40,1746ad0166,1051009266,1fc407e217"/></svg>
+          <span>▶ JUEGA EN EL CELULAR</span>
+        </a>
+        <a class="qr repo" href="https://github.com/CamiloMaartinez/monkey-banana-catcher" target="_blank" rel="noopener" aria-label="Código QR del repositorio en GitHub para descargar el juego completo">
+          <svg viewBox="-4 -4 45 45" aria-hidden="true"><rect x="-4" y="-4" width="45" height="45" fill="#fff"/><path class="qrp" fill="#16101f" d="" data-hex="1fd0ea197f,1048349f41,1744bb975d,17443d5c5d,17544ff05d,1053758b41,1fd555557f,5bad500,fe6467c31,519442928,10ff17ce63,914a3c771,b4e457eff,3183129ac,a70a253ab,1509a607a0,c179dcd6,12f309948,fc735df27,7188ff231,9ca564e7c,33a54a82c,d6f098243,10839cc0a0,1170f95dde,112947c106,1352c40f6f,14abf5a680,14e83f6ffd,11b5ab10,1fd04b8559,105ef6d110,175c8eaff5,175701e956,17580289a5,1050dfc751,1fc6225cbf"/></svg>
+          <span>⬇ DESCARGA EL JUEGO</span>
+        </a>
+      </div>
     </div>
   </section>
 </main>

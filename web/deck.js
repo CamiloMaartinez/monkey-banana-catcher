@@ -310,12 +310,11 @@ if (reduce) {   // one still frame of each, in a clear state
 } else requestAnimationFrame(frame);
 document.fonts?.ready.then(() => { if (reduce) { drawPipeline(0, 3000); } });
 
-// ---------- QR to the playable page (rows of the matrix in hex, built into an SVG path) ----------
-const QR = "1fcb50877f,104405b141,175170925d,1742aa0d5d,175a69a65d,1053ce0141,1fd555557f,000c61d800,095a59fbb4,0ca3ffa442,0a5ad77e98,0a3212c7bf,1bf5efd0e6,1618316e94,1ee263eb9c,0794a79604,057e9922ee,0322d65e10,195983b298,1581d8a775,0e5b6dd0c6,121c217a1a,0949cfa388,1f1034a524,0c507cde75,1a3d0f61fc,01c854a582,008df6b44f,1efb35d3f1,001c12ad18,1fcb5f315e,1041875514,1751e271fc,174f2b0a40,1746ad0166,1051009266,1fc407e217";
-document.getElementById("qrp").setAttribute("d", QR.split(",").map((hex, y) => {
+// ---------- QR codes (rows of each matrix in hex, built into an SVG path) ----------
+$$(".qrp").forEach((p) => p.setAttribute("d", p.dataset.hex.split(",").map((hex, y) => {
   const bits = BigInt("0x" + hex).toString(2).padStart(37, "0");
   return [...bits.matchAll(/1+/g)].map((m) => `M${m.index} ${y}h${m[0].length}v1H${m.index}z`).join("");
-}).join(""));
+}).join("")));
 
 // ---------- navigation ----------
 const count = document.getElementById("count"), bar = document.getElementById("progress");
