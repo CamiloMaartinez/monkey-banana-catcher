@@ -64,6 +64,7 @@ def parse_args():
     p.add_argument("--no-camera", action="store_true", help="keyboard only")
     p.add_argument("--camera", type=int, default=config.CAMERA_INDEX)
     p.add_argument("--mute", action="store_true", help="start with sound and music off")
+    p.add_argument("--windowed", action="store_true", help="open in a window instead of full screen (F11 switches)")
     p.add_argument("--demo-seconds", type=float, default=0, help=argparse.SUPPRESS)  # auto-quit, for tests
     return p.parse_args()
 
@@ -100,7 +101,10 @@ class Game:
             sfx.music_on = self.settings["music"]
             sfx.preload()
         pygame.display.set_caption("Monkey Banana Catcher")
-        self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), pygame.SCALED)
+        # Full screen by default: SCALED keeps the pixel art sharp and adds black bars if the
+        # monitor has another shape. F11 switches between full screen and a window.
+        flags = pygame.SCALED if args.windowed else pygame.SCALED | pygame.FULLSCREEN
+        self.screen = pygame.display.set_mode((SCREEN_W, SCREEN_H), flags)
         self.world = pygame.Surface((WORLD_W, WORLD_H))
         self.spr = sprites.load()
         pygame.display.set_icon(pygame.transform.scale(self.spr["banana"], (36, 27)))

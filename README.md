@@ -205,8 +205,8 @@ _Juego retro pixel-art. El menú principal tiene **JUGAR / TUTORIAL / CALIBRAR /
 - **AI on screen:** the right panel shows the camera, the move and jump lamps, the raw network output and a live confidence graph (green = left hand, yellow = right hand, dashed line = 70%). After each level, an **AI STATS** box shows how often a hand was seen, how often the network was sure, the average reaction time and the number of pinches.
   _**IA en pantalla:** el panel derecho muestra la cámara, las luces de mover y saltar, la salida cruda de la red y una gráfica de confianza en vivo (verde = mano izquierda, amarillo = mano derecha, línea punteada = 70%). Después de cada nivel, el recuadro **AI STATS** muestra qué tanto se vio cada mano, qué tanto la red estuvo segura, el tiempo de reacción promedio y el número de pellizcos._
 
-Keys: P pause, M sound, N music, L language, R network/rules, F11 full screen, ESC back. Screenshots: `docs/screens/`.
-_Teclas: P pausa, M sonido, N música, L idioma, R red/reglas, F11 pantalla completa, ESC atrás. Capturas: `docs/screens/`._
+The game opens in full screen; F11 switches to a window and back (or start it with `python game.py --windowed`). Keys: P pause, M sound, N music, L language, R network/rules, F11 full screen, ESC back. Screenshots: `docs/screens/`.
+_El juego abre en pantalla completa; F11 cambia a ventana y de vuelta (o inícialo con `python game.py --windowed`). Teclas: P pausa, M sonido, N música, L idioma, R red/reglas, F11 pantalla completa, ESC atrás. Capturas: `docs/screens/`._
 
 | Command | What it does |
 |---|---|
